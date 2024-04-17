@@ -1,0 +1,31 @@
+//PREGUNTA: def token_required(f): a que hace referencia la f ? 
+
+ En la definición de la función token_required, f es un parámetro que representa la función 
+ a la que se aplicará el decorador. Cuando aplicas el decorador @token_required a una función 
+ específica, como en el caso de la función protected, f será la referencia a esa función.
+
+ Por ejemplo, en el código que proporcioné anteriormente:
+
+ @app.route('/protected', methods=['GET'])
+ @token_required
+ def protected(current_user):
+     return jsonify({'message': f'Welcome, {current_user["username"]}!'})
+
+ En esencia, f es una referencia a la función que será decorada y modificada por 
+ token_required. Esto permite que token_required pueda trabajar con cualquier función 
+ que se le pase como argumento.
+
+//QUE_ES_DECORAR_EN_Python ?
+
+ Cuando hablo de "decorar" una función en Python, me refiero al proceso de agregar 
+ funcionalidad adicional a una función existente sin cambiar su implementación interna. 
+ Esto se logra envolviendo la función original dentro de otra función, que a menudo se
+ denomina "decorador".
+
+ En Python, los decoradores son funciones que toman otra función como argumento y devuelven
+ una nueva función que generalmente modifica el comportamiento de la función original de 
+ alguna manera. Al decorar una función, puedes agregar funcionalidad común a varias funciones
+ sin tener que repetir el mismo código en cada una. Esto promueve la reutilización del código 
+ y ayuda a mantenerlo organizado y modular.
+
+
