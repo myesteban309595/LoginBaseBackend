@@ -37,5 +37,22 @@ def token_required(f):
     
     return decorated
 
+# Ruta para registrar un nuevo usuario
+@app.route('/register', method=['POST'])
+def register():
+    username = request.json['username']  # esto es como el req.body
+    password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8')
+    
+    if mongo.db.users.find_one({'username': username}):
+        return jsonify({'message': 'user already exist'}),400
+    
+    mongo.db.users.insert_one(
+        { 
+         'username': username,
+         'password': password
+         })
+    return jsonify({'message': 'User created succesfully'}), 201
+
+
 
 
