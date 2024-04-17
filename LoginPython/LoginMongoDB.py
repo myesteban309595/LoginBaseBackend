@@ -53,6 +53,44 @@ def register():
          })
     return jsonify({'message': 'User created succesfully'}), 201
 
+# Ruta para iniciar sesión
+@app.route('/login', methods=['POST'])
+def login():
+    auth = request.authorization
+    
+    if not auth or not auth.username or not auth.password:
+        return jsonify({'message': 'Not verify'}), 401
+    
+    user = mongo.db.users.find_one({'message': auth.username})
+    
+    if not user:
+       return jsonify({'message': 'User not found!'}), 401
+   
+    if bcrypt.check_password_hash(user['password'], auth.password):
+        token = jwt.encode(
+            {'username': user['username'],'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, 
+              app.config['SECRET_KEY'])
+        
+        return jsonify({'token': token.decode('UTF-8')})
+
+    return jsonify({'message': 'Password is incorrect!'}), 401
+
+# Ruta protegida
+@app.route('/protected', methods=['GET'])
+@token_required
+def protected(current_user):
+    return jsonify({'message': f'Welcome, {current_user["username"]}!'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+    
+    
+    
+    
+
 
 
 
